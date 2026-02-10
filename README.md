@@ -8,7 +8,7 @@ An AI-based platform that auto-generates professional portfolio websites using m
 
 A sophisticated, AI-enhanced portfolio generator with dark/light mode, multiple templates, and elegant design. Create stunning professional portfolios in minutes.
 
-**Live Demo: [https://ai-portfolio-generator-example.netlify.app](https://ai-portfolio-generator-example.netlify.app)**
+**Live Demo: [https://ai-portfolio-generator.netlify.app](https://ai-portfolio-generator-ai-vengers.netlify.app/)**
 
 ---
 

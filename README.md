@@ -36,7 +36,7 @@ A sophisticated, AI-enhanced portfolio generator with dark/light mode, multiple 
 ##  Quick Start
 
 ### 1. **Live Demo**
-Visit the live application: [https://ai-portfolio-generator-example.netlify.app](https://ai-portfolio-generator-example.netlify.app)
+Visit the live application: [https://ai-portfolio-generator.netlify.app](https://ai-portfolio-generator-ai-vengers.netlify.app/)
 
 ### 2. **Local Development**
 

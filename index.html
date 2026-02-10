@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio Generator - AI Powered</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <!-- Firebase UI CSS -->
+  <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.0/firebase-ui-auth.css" />
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="#" class="nav-brand">
+        <i class="fas fa-magic brand-icon"></i>
+        <span>PortfolioGen AI</span>
+      </a>
+      <div class="nav-menu">
+        <a href="#home" class="nav-link active">Home</a>
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#generator" class="nav-link">Generator</a>
+        <a href="#templates" class="nav-link">Templates</a>
+      </div>
+      <div class="nav-actions">
+        <button id="auth-btn" class="secondary-button" onclick="toggleAuthModal()">
+          <i class="fas fa-user"></i> Sign In
+        </button>
+      </div>
+      <div class="hamburger" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Auth Modal -->
+  <div id="auth-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Welcome Back</h3>
+        <button class="modal-close" onclick="closeAuthModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="firebaseui-auth-container"></div>
+        <div class="auth-divider">
+          <span>or continue with</span>
+        </div>
+        <button class="github-auth-btn" onclick="signInWithGitHub()">
+          <i class="fab fa-github"></i> Sign in with GitHub
+        </button>
+        <div class="auth-terms">
+          By continuing, you agree to our Terms of Service and Privacy Policy
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main id="home" class="hero">
+    <div class="hero-background">
+      <div class="gradient-orb orb-1"></div>
+      <div class="gradient-orb orb-2"></div>
+      <div class="gradient-orb orb-3"></div>
+    </div>
+    
+    <div class="container">
+      <div class="hero-container">
+        <div class="hero-content">
+          <span class="hero-badge">
+            <i class="fas fa-robot"></i> AI Powered
+          </span>
+          <h1 class="hero-title">
+            Create Stunning <span class="gradient-text">Portfolios</span> in Minutes
+          </h1>
+          <p class="hero-description">
+            Generate professional portfolios with AI enhancement, GitHub integration, and Firebase authentication. Export to HTML or deploy directly.
+          </p>
+          <div class="hero-buttons">
+            <button class="cta-button large" onclick="scrollToGenerator()">
+              <i class="fas fa-rocket"></i> Start Creating
+            </button>
+            <button class="secondary-button large" onclick="loadExampleData()">
+              <i class="fas fa-play-circle"></i> Load Example
+            </button>
+          </div>
+          <div class="hero-stats">
+            <div class="stat-item">
+              <h3>500+</h3>
+              <p>Portfolios Created</p>
+            </div>
+            <div class="stat-item">
+              <h3>99%</h3>
+              <p>Satisfaction Rate</p>
+            </div>
+            <div class="stat-item">
+              <h3>24/7</h3>
+              <p>AI Assistance</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="hero-visual">
+          <div class="mockup-container">
+            <div class="browser-mockup">
+              <div class="browser-header">
+                <div class="browser-dots">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+                <div class="browser-url">your-portfolio.com</div>
+              </div>
+              <div class="browser-content">
+                <div class="portfolio-preview">
+                  <div class="preview-header">
+                    <div class="preview-avatar"></div>
+                    <div class="preview-text">
+                      <div class="preview-line long"></div>
+                      <div class="preview-line medium"></div>
+                    </div>
+                  </div>
+                  <div class="preview-section">
+                    <div class="preview-line short"></div>
+                    <div class="preview-line long"></div>
+                  </div>
+                  <div class="preview-cards">
+                    <div class="preview-card"></div>
+                    <div class="preview-card"></div>
+                    <div class="preview-card"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="floating-element" style="top: -20px; right: -20px;">
+              <i class="fas fa-star"></i>
+            </div>
+            <div class="floating-element" style="bottom: 30px; left: -30px; animation-delay: -2s;">
+              <i class="fas fa-heart"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="scroll-indicator" onclick="scrollToGenerator()">
+      <i class="fas fa-chevron-down"></i>
+      <span>Scroll to Generator</span>
+    </div>
+  </main>
+
+  <!-- Portfolio Generator Section -->
+  <section id="generator" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Portfolio Generator</span>
+        <h2 class="section-title">Create Your Portfolio</h2>
+        <p class="section-description">
+          Fill in your details, upload your resume, and let AI enhance your content. Connect with GitHub to showcase your projects.
+        </p>
+      </div>
+
+      <div class="wrapper">
+        <div class="form-panel">
+          <div class="panel-header">
+            <h2><i class="fas fa-edit"></i> Your Information</h2>
+            <div class="user-info" id="user-info" style="display: none;">
+              <img id="user-avatar" class="user-avatar" src="" alt="">
+              <span id="user-name"></span>
+            </div>
+          </div>
+          
+          <form id="portfolio-form">
+            <div class="form-section">
+              <h3><i class="fas fa-user-circle"></i> Basic Information</h3>
+              
+              <div class="form-group">
+                <label for="profile-photo">
+                  <i class="fas fa-camera"></i> Profile Photo
+                </label>
+                <div class="upload-area" id="photo-upload-area">
+                  <input type="file" id="profile-photo" accept="image/*" style="display: none;">
+                  <div class="upload-content">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Click to upload profile photo</p>
+                    <span>JPG, PNG up to 2MB</span>
+                  </div>
+                </div>
+                <div id="photo-preview" class="photo-preview"></div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="name">
+                    <i class="fas fa-user"></i> Full Name *
+                  </label>
+                  <input type="text" id="name" required placeholder="John Doe">
+                </div>
+                
+                <div class="form-group">
+                  <label for="email">
+                    <i class="fas fa-envelope"></i> Email *
+                  </label>
+                  <input type="email" id="email" required placeholder="john@example.com">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="title">
+                  <i class="fas fa-briefcase"></i> Professional Title *
+                </label>
+                  <input type="text" id="title" required placeholder="Full Stack Developer">
+              </div>
+
+              <div class="form-group">
+                <label for="about">
+                  <i class="fas fa-info-circle"></i> About Me *
+                </label>
+                <textarea id="about" required rows="4" placeholder="Tell us about yourself..."></textarea>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h3><i class="fas fa-code"></i> Skills & Experience</h3>
+              
+              <div class="form-group">
+                <label for="skills">
+                  <i class="fas fa-tools"></i> Skills (comma separated) *
+                </label>
+                <input type="text" id="skills" required placeholder="JavaScript, React, Node.js, Python">
+                <div class="skill-tags" id="skill-tags"></div>
+              </div>
+
+              <div class="form-group">
+                <label for="github-username">
+                  <i class="fab fa-github"></i> GitHub Username
+                </label>
+                <div class="github-input">
+                  <input type="text" id="github-username" placeholder="your-username">
+                  <button type="button" class="btn-small" onclick="fetchGitHubProjects()">
+                    <i class="fas fa-sync-alt"></i> Fetch Projects
+                  </button>
+                </div>
+                <div id="github-projects" class="github-projects"></div>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h3><i class="fas fa-project-diagram"></i> Projects</h3>
+              
+              <div id="projects-container">
+                <div class="project-item">
+                  <div class="form-group">
+                    <label>Project Name</label>
+                    <input type="text" class="project-name" placeholder="E-commerce Platform">
+                  </div>
+                  <div class="form-group">
+                    <label>Project Description</label>
+                    <textarea class="project-desc" rows="3" placeholder="Describe your project..."></textarea>
+                  </div>
+                  <button type="button" class="btn-small remove-project" onclick="removeProject(this)">
+                    <i class="fas fa-trash"></i> Remove
+                  </button>
+                </div>
+              </div>
+              
+              <button type="button" class="btn-small" onclick="addProject()">
+                <i class="fas fa-plus"></i> Add Another Project
+              </button>
+            </div>
+
+            <div class="form-section">
+              <h3><i class="fas fa-file-alt"></i> Resume & AI Enhancement</h3>
+              
+              <div class="form-group">
+                <label for="resume">
+                  <i class="fas fa-file-upload"></i> Upload Resume (Optional)
+                </label>
+                <div class="upload-area" id="resume-upload-area">
+                  <input type="file" id="resume" accept=".pdf,.doc,.docx,.txt" style="display: none;">
+                  <div class="upload-content">
+                    <i class="fas fa-file"></i>
+                    <p>Click to upload resume</p>
+                    <span>PDF, DOC, DOCX, TXT up to 5MB</span>
+                  </div>
+                </div>
+                <div id="resume-info" class="resume-info"></div>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn-generate" onclick="generatePortfolio()">
+                <i class="fas fa-bolt"></i> Generate Portfolio
+              </button>
+              <button type="button" class="btn-ai" onclick="aiEnhance()">
+                <i class="fas fa-robot"></i> AI Enhance
+              </button>
+              <button type="button" class="btn-export" onclick="exportPortfolio()">
+                <i class="fas fa-download"></i> Export HTML
+              </button>
+              <button type="button" class="btn-github" onclick="deployToGitHub()" id="deploy-btn">
+                <i class="fab fa-github"></i> Deploy to GitHub
+              </button>
+              <button type="reset" class="btn-clear" onclick="clearForm()">
+                <i class="fas fa-redo"></i> Clear Form
+              </button>
+            </div>
+          </form>
+
+          <div id="status-message" class="status-message"></div>
+        </div>
+
+        <div class="preview-panel">
+          <div class="panel-header">
+            <h2><i class="fas fa-eye"></i> Live Preview</h2>
+            <div class="preview-controls">
+              <button type="button" class="btn-download" onclick="downloadPortfolio()">
+                <i class="fas fa-download"></i> Download
+              </button>
+              <button type="button" class="btn-copy" onclick="copyHTML()">
+                <i class="fas fa-copy"></i> Copy HTML
+              </button>
+              <div class="theme-selector">
+                <select id="theme-select" onchange="changeTheme()">
+                  <option value="default">Default Theme</option>
+                  <option value="dark">Dark Theme</option>
+                  <option value="minimal">Minimal Theme</option>
+                  <option value="professional">Professional Theme</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <div class="preview-container">
+            <div id="portfolio-preview" class="portfolio-preview-content">
+              <div class="preview-placeholder">
+                <i class="fas fa-magic"></i>
+                <h3>Your Portfolio Preview</h3>
+                <p>Fill the form and click "Generate Portfolio" to see your portfolio here</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="features-section section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Why Choose Us</span>
+        <h2 class="section-title">Powerful Features</h2>
+        <p class="section-description">
+          Everything you need to create an impressive portfolio that stands out
+        </p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon-wrapper">
+            <i class="fas fa-robot"></i>
+          </div>
+          <h3>AI Enhancement</h3>
+          <p>Automatically improve your content with Google Gemini AI. Get professional descriptions and suggestions.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon-wrapper">
+            <i class="fab fa-github"></i>
+          </div>
+          <h3>GitHub Integration</h3>
+          <p>Connect your GitHub account to automatically fetch and showcase your repositories and projects.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon-wrapper">
+            <i class="fas fa-fire"></i>
+          </div>
+          <h3>Firebase Auth</h3>
+          <p>Secure authentication with Firebase. Save your portfolios and access them from anywhere.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon-wrapper">
+            <i class="fas fa-palette"></i>
+          </div>
+          <h3>Multiple Themes</h3>
+          <p>Choose from various professionally designed templates and themes for your portfolio.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon-wrapper">
+            <i class="fas fa-mobile-alt"></i>
+          </div>
+          <h3>Responsive Design</h3>
+          <p>Your portfolio will look great on all devices - desktop, tablet, and mobile.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon-wrapper">
+            <i class="fas fa-cloud-upload-alt"></i>
+          </div>
+          <h3>One-Click Deploy</h3>
+          <p>Deploy your portfolio directly to GitHub Pages or export as a standalone HTML file.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <h3><i class="fas fa-magic"></i> PortfolioGen AI</h3>
+          <p>Create stunning portfolios with AI enhancement and one-click deployment.</p>
+          <div class="footer-socials">
+            <a href="#"><i class="fab fa-github"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-discord"></i></a>
+          </div>
+        </div>
+        
+        <div class="footer-links">
+          <div class="footer-column">
+            <h4>Product</h4>
+            <ul>
+              <li><a href="#features">Features</a></li>
+              <li><a href="#generator">Generator</a></li>
+              <li><a href="#templates">Templates</a></li>
+              <li><a href="#pricing">Pricing</a></li>
+            </ul>
+          </div>
+          
+          <div class="footer-column">
+            <h4>Resources</h4>
+            <ul>
+              <li><a href="#">Documentation</a></li>
+              <li><a href="#">Tutorials</a></li>
+              <li><a href="#">Blog</a></li>
+              <li><a href="#">FAQ</a></li>
+            </ul>
+          </div>
+          
+          <div class="footer-column">
+            <h4>Legal</h4>
+            <ul>
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#">Terms of Service</a></li>
+              <li><a href="#">Cookie Policy</a></li>
+              <li><a href="#">GDPR</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2024 PortfolioGen AI. All rights reserved.</p>
+        <div class="footer-legal">
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+          <a href="#">Cookies</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/ui/6.0.0/firebase-ui-auth.js"></script>
+  <script>
+    // Test if CSS is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        // Method 1: Check if styles are applied
+        const testDiv = document.createElement('div');
+        testDiv.style.position = 'absolute';
+        testDiv.style.opacity = '0';
+        document.body.appendChild(testDiv);
+        
+        // Method 2: Check CSS file loading
+        const links = document.getElementsByTagName('link');
+        let cssLoaded = false;
+        for (let link of links) {
+            if (link.rel === 'stylesheet' && link.href.includes('style.css')) {
+                cssLoaded = true;
+                break;
+            }
+        }
+        
+        console.log('CSS loaded:', cssLoaded);
+        
+        // Method 3: Add visual indicator
+        if (cssLoaded) {
+            const indicator = document.createElement('div');
+            indicator.innerHTML = '✅ CSS Loaded';
+            indicator.style.cssText = 'position:fixed;top:10px;right:10px;background:green;color:white;padding:5px 10px;border-radius:4px;z-index:9999;font-size:12px;';
+            document.body.appendChild(indicator);
+            setTimeout(() => indicator.remove(), 3000);
+        } else {
+            const indicator = document.createElement('div');
+            indicator.innerHTML = '❌ CSS NOT Loaded';
+            indicator.style.cssText = 'position:fixed;top:10px;right:10px;background:red;color:white;padding:5px 10px;border-radius:4px;z-index:9999;font-size:12px;';
+            document.body.appendChild(indicator);
+        }
+    });
+</script>
+  
+  <!-- Main Script -->
+  <script src="script.js"></script>
+</body>
+</html>
